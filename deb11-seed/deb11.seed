@@ -32,6 +32,7 @@ d-i passwd/user-fullname string Admin
 d-i passwd/username string admin
 d-i passwd/user-password password Password123
 d-i passwd/user-password-again password Password123
+d-i passwd/user-default-groups string sudo
 
 # Clock and timezone
 d-i clock-setup/utc boolean true
@@ -147,7 +148,7 @@ d-i partman/confirm boolean true
 d-i partman/confirm_nooverwrite boolean true
 
 tasksel tasksel/first multiselect standard, ssh-server
-d-i pkgsel/include string vim curl wget
+d-i pkgsel/include string vim curl wget sudo
 
 popularity-contest popularity-contest/participate boolean false
 
