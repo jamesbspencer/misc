@@ -1,0 +1,148 @@
+## Debian 11 Preseed file
+
+## NOT WORKING ##
+
+d-i debian-installer/locale string en_US
+
+d-i keyboard-configuration/xkb-keymap select us
+
+d-i netcfg/choose_interface select auto
+
+#d-i netcfg/get_hostname string debian11
+#d-i netcfg_get_domain string spencer.test
+
+d-i netcfg/hostname string debian11
+#d-i netcfg/domain string spencer.test
+
+d-i mirror/country string manual
+d-i mirror/http/hostname string deb.debian.org
+d-i mirror/http/directory string /debian
+d-i mirror/http/proxy string
+
+d-i passwd/root-password password Password123
+d-i passwd/root-password-again password Password123
+
+d-i passwd/user-fullname string Admin
+d-i passwd/username string admin
+d-i passwd/user-password password Password123
+d-i passwd/user-password-again password Password123
+
+d-i clock-setup/utc boolean true
+d-i time/zone string US/Eastern
+
+#d-i partman-auto/init_automatically_parition select biggest_free
+d-i partman-auto/disk string /dev/sda
+d-i partman-auto/method string lvm
+#d-i partman-auto-lvm/guided_size string max
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-lvm/confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+
+d-i partman-efi/non_efi_system boolean true
+
+d-i partman-auto/expert_recipe string \
+pvs :: \
+  400 10 400 ext2	\
+    $primary{ } \
+    $bootable{ } \
+    method{ format } \
+    format{ } \
+    use_filesystem{ } \
+    filesystem{ ext2 } \
+    mountpoint{ /boot } \
+  . \
+  9123840 10000000 10000000 xfs \
+    $primary{ } \
+    method{ lvm } \
+    device{ /dev/sda3 }	\
+    vg_name{ vg00 } \
+  . \
+vg00 ::	\
+  2048 60 2048 linux-swap \
+    $defaultignore{ } \
+    $lvmok{ } \
+    format{ } \
+    lv_name{ swap } \
+    method{ swap } \
+    in_vg{ vg00 } \
+  . \
+  20480 20 20480 xfs \
+    $defaultignore{ } \
+    $lvmok{ } \
+    lv_name{ root } \
+    method{ format } \
+    format{ } \
+    use_filesystem{ } \
+    filesystem{ xfs } \
+    mountpoint{ / } \
+    in_vg{ vg00 } \
+  . \
+  2000 200 2048 xfs \
+    $defaultignore{ } \
+    $lvmok{ } \
+    lv_name{ tmp } \
+    method{ format } \
+    format{ } \
+    use_filesystem{ } \
+    filesystem{ xfs } \
+    mountpoint{ /tmp } \
+    in_vg{ vg00 } \
+  . \
+  10000 1000 10240 xfs \
+    $defaultignore{ } \
+    $lvmok{ } \
+    lv_name{ var } \
+    method{ format } \
+    format{ } \
+    use_filesystem{ } \
+    filesystem{ xfs } \
+    mountpoint{ /var } \
+    in_vg{ vg00 } \
+  . \
+  10000 1000 10240 xfs \
+    $defaultignore{ } \
+    $lvmok{ } \
+    lv_name{ log } \
+    method{ format } \
+    format{ } \
+    use_filesystem{ } \
+    filesystem{ xfs } \
+    mountpoint{ /var/log } \
+    in_vg{ vg00 } \
+  . \
+  10000 1000 10240 xfs \
+    $defaultignore{ } \
+    $lvmok{ } \
+    lv_name{ audit } \
+    method{ format } \
+    format{ } \
+    use_filesystem{ } \
+    filesystem{ xfs } \
+    mountpoint{ /var/log/audit } \
+    in_vg{ vg00 } \
+  . \
+  45000 4500 46080 xfs \
+    $defaultignore{ } \
+    $lvmok{ } \
+    lv_name{ home } \
+    method{ format } \
+    format{ } \
+    use_filesystem{ } \
+    filesystem{ xfs } \
+    mountpoint{ /home } \
+    in_vg{ vg00 } \
+  . \
+				
+#d-i partman-partitioning/confirm_write_new_label boolean true
+#d-i partman/choose_partition select finish
+#d-i partman/confirm boolean true
+#d-i partman/confirm_nooverwrite boolean true
+
+tasksel tasksel/first multiselect standard, ssh-server
+d-i pkgsel/include string vim curl wget
+
+popularity-contest popularity-contest/participate boolean false
+
+d-i grub-installer/only_debian boolean true
+
+d-i finish-install/reboot_in_progress note
