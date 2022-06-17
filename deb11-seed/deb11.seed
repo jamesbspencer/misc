@@ -2,11 +2,15 @@
 
 ## NOT WORKING ##
 
+# The locale
 d-i debian-installer/locale string en_US
 
+# Use the US keyboard map
 d-i keyboard-configuration/xkb-keymap select us
 
+# Auto select an interface
 d-i netcfg/choose_interface select auto
+
 
 #d-i netcfg/get_hostname string debian11
 #d-i netcfg_get_domain string spencer.test
@@ -19,17 +23,21 @@ d-i mirror/http/hostname string deb.debian.org
 d-i mirror/http/directory string /debian
 d-i mirror/http/proxy string
 
+# Set the root password
 d-i passwd/root-password password Password123
 d-i passwd/root-password-again password Password123
 
+# Add a user account
 d-i passwd/user-fullname string Admin
 d-i passwd/username string admin
 d-i passwd/user-password password Password123
 d-i passwd/user-password-again password Password123
 
+# Clock and timezone
 d-i clock-setup/utc boolean true
 d-i time/zone string US/Eastern
 
+# Partitioning section
 #d-i partman-auto/init_automatically_parition select biggest_free
 d-i partman-auto/disk string /dev/sda
 d-i partman-auto/method string lvm
@@ -133,10 +141,10 @@ vg00 ::	\
     in_vg{ vg00 } \
   . \
 				
-#d-i partman-partitioning/confirm_write_new_label boolean true
-#d-i partman/choose_partition select finish
-#d-i partman/confirm boolean true
-#d-i partman/confirm_nooverwrite boolean true
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman/choose_partition select finish
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
 
 tasksel tasksel/first multiselect standard, ssh-server
 d-i pkgsel/include string vim curl wget
